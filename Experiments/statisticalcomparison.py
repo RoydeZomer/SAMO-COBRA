@@ -14,22 +14,29 @@ from NSGAIIexperimentshv import NSGAII_Experiment
 from NSGAIIIexperimentshv import NSGAIII_Experiment
 
 
-NSGAII_results = NSGAII_Experiment()
-NSGAIII_results=NSGAIII_Experiment()
+# NSGAII_results = NSGAII_Experiment()
+# with open("nsgaii.json", 'w') as fout:
+#     json_dumps_str = json.dumps(NSGAII_results, indent=4)
+#     print(json_dumps_str, file=fout)
+with open("/results/nsgaii.json") as f:
+    NSGAII_results = json.load(f)
+    
+# NSGAIII_results=NSGAIII_Experiment()
+# with open("nsgaiii.json", 'w') as fout:
+#     json_dumps_str = json.dumps(NSGAIII_results, indent=4)
+#     print(json_dumps_str, file=fout)
+with open("/results/nsgaiii.json") as f:
+    NSGAII_results = json.load(f)
+    
 CEGO_results = {}
 PHV_results = {}
 SMS_results = {}
-
-
-# with open("nsgaiii.json", 'w') as fout:
-#     json_dumps_str = json.dumps(nsgaiii, indent=4)
-#     print(json_dumps_str, file=fout)
 
 funcNames = ["BNH","CEXP","SRN","TNK","C3DTLZ4","CTP1","OSY","TBTD","NBP","DBD","WP","SPD","CSI","SRD","WB","BICOP1","TRICOP","BICOP2"]
 refs = [np.array([140,50]),np.array([1,9]), np.array([301,72]),np.array([3,3]),np.array([3,3]),np.array([1,2]),np.array([0,386]),np.array([0.1,50000]),np.array([11150, 12500]),np.array([5,50]),np.array([83000, 1350, 2.85, 15989825, 25000]),np.array([16,19000,-260000]),np.array([42,4.5,13]),np.array([7000,1700]),np.array([350,0.1]),np.array([9,9]),np.array([34,-4,90]),np.array([70,70])]
 
 
-SMSFolder = 'P:/20.xxx Projecten 2020/20.501 PhD Roy de Winter/Support/Python/SAMO-COBRA/sacobra multi/results'
+SMSFolder = '/results/SMS/'
 for i in range(len(funcNames)):
     hypSMS = []
     funcName = funcNames[i]
@@ -43,7 +50,7 @@ for i in range(len(funcNames)):
         hypSMS.append(hypervolume(objectives, ref))
     SMS_results[funcName] = hypSMS
 
-PHVFolder = 'C:/Users/r.dewinter/Desktop/desktop/sacobra multi - phv/results'
+PHVFolder = '/results/PHV/'
 for i in range(len(funcNames)):
     hypPHV = []
     funcName = funcNames[i]
@@ -57,14 +64,13 @@ for i in range(len(funcNames)):
         hypPHV.append(hypervolume(objectives, ref))
     PHV_results[funcName] = hypPHV
 
-CEGOFolder = 'C:/Users/r.dewinter/Desktop/desktop/CONSTRAINED_EGO/results'
+CEGOFolder = '/results/CEGO/'
 for i in range(len(funcNames)):
     hypCEGO = []
     funcName = funcNames[i]
     ref = refs[i]
     try:
         for run in range(10):
-        
             fname = '/'+str(funcName)+'/obj_run'+str(run)+'_finalPF.csv'
             file = CEGOFolder+fname
             # file = cegoFolderFunction+'/obj_run'+str(run)+'.csv'
@@ -72,7 +78,7 @@ for i in range(len(funcNames)):
             hypCEGO.append(hypervolume(objectives, ref))
         CEGO_results[funcName] = hypCEGO
     except:
-        print(funcName)
+        print(funcName, run)
 
     
 for funcName in funcNames:
