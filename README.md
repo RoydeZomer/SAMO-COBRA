@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4075509.svg)](https://doi.org/10.5281/zenodo.4075509)
+
 # SAMO-COBRA: 
 ## A Fast Surrogate Assisted ConstrainedMulti-objective Optimization Algorithm
 
