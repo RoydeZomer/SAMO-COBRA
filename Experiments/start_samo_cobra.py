@@ -30,11 +30,7 @@ from testFunctions.TRICOP import TRICOP
 from SAMO_COBRA_Init import SAMO_COBRA_Init
 from SAMO_COBRA_PhaseII import SAMO_COBRA_PhaseII
 
-# from SACOBRA import getXbest
-# from SACOBRA import getFbest
-
 import numpy as np
-import time
 import copy
 cobras = []
 
@@ -50,9 +46,7 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvosy.append(cobra['hypervolumeProgress'][-1])
@@ -70,9 +64,7 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvnbp.append(cobra['hypervolumeProgress'][-1])
@@ -90,9 +82,7 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvbnh.append(cobra['hypervolumeProgress'][-1])
@@ -110,9 +100,7 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvcexp.append(cobra['hypervolumeProgress'][-1])
@@ -131,12 +119,9 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
-    # print(time.time()-s)
     besthvSRN.append(cobra['hypervolumeProgress'][-1])
     print('SRN', np.mean(besthvSRN), np.std(besthvSRN))
 
@@ -152,12 +137,9 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
-    # print(time.time()-s)
     besthvtnk.append(cobra['hypervolumeProgress'][-1])
     print('TNK', np.mean(besthvtnk), np.std(besthvtnk))
 
@@ -174,7 +156,6 @@ for i in range(10):
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvctp1.append(cobra['hypervolumeProgress'][-1])
@@ -193,7 +174,6 @@ for i in range(10):
     nConstraints = 5
     ref = np.array([350,0.1])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvwb.append(cobra['hypervolumeProgress'][-1])
@@ -212,7 +192,6 @@ for i in range(10):
     nConstraints = 3
     ref = np.array([0.1,50000])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     bestTBTD.append(cobra['hypervolumeProgress'][-1])
@@ -231,7 +210,6 @@ for i in range(10):
     nConstraints = 5
     ref = np.array([5,50])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     bestDBD.append(cobra['hypervolumeProgress'][-1])
@@ -250,7 +228,6 @@ for i in range(10): # lhs geeft betere resultaten dan optimalisatie
     nConstraints = 7
     ref = np.array([83000, 1350, 2.85, 15989825, 25000])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     bestWP.append(cobra['hypervolumeProgress'][-1])
@@ -268,9 +245,7 @@ for i in range(10):
     d=len(lower)
     xStart = lower+np.random.rand(len(upper))*upper
     feval = 40*d
-    s = time.time()
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)#, initDesign='BOUNDARIES')
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvc3dtlz4.append(cobra['hypervolumeProgress'][-1])
@@ -289,7 +264,6 @@ for i in range(10):
     nConstraints=9
     ref = np.array([16,19000,-260000])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     bestSPD.append(cobra['hypervolumeProgress'][-1])
@@ -308,7 +282,6 @@ for i in range(10):
     nConstraints = 10
     ref = np.array([42,4.5,13])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     bestCSI.append(cobra['hypervolumeProgress'][-1])
     print('CSI', bestCSI, np.mean(bestCSI), np.std(bestCSI))  
@@ -326,7 +299,6 @@ for i in range(10):
     ref = np.array([7000,1700])
     xStart = lower+np.random.rand(len(upper))*upper
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     bestSRD.append(cobra['hypervolumeProgress'][-1])
@@ -345,7 +317,6 @@ for i in range(10):
     nConstraints = 3
     ref = np.array([34,-4,90])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvTRICOP.append(cobra['hypervolumeProgress'][-1])
@@ -365,7 +336,6 @@ for i in range(10):
     nConstraints = 1
     ref = np.array([9,9])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvBICOP1.append(cobra['hypervolumeProgress'][-1])
@@ -384,7 +354,6 @@ for i in range(10):
     nConstraints = 2
     ref = np.array([70,70])
     cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=i)
-    # cobra['plot'] = True
     cobra = SAMO_COBRA_PhaseII(cobra)
     cobras.append(copy.deepcopy(cobra))
     besthvBICOP2.append(cobra['hypervolumeProgress'][-1])
