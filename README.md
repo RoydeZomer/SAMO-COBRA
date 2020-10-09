@@ -60,10 +60,12 @@ cobra = SAMO_COBRA_PhaseII(cobra)
 
 ## Comparison with CEGO, NSGA-II, NSGA-III
 Two Different infill criteria are used for SAMO-COBRA. The Predicted HyperVolume (PHV) infill criteria, and the S-Metric Selection infill criteria (SMS). The variants are compared to CEGO, NSGAII, NSGAIII on 18 test problems. The experiments can be found in the Experiments folder. See the results here:
+
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/SAMO_COBRA_RESULTS.PNG?raw=true)
 
 ## Comparison with SMES-RBF
 Also a comparison is made with SMES-RBF. Because the authors of SMES-RBF didn't provide an implementation, the results form their paper are compared to one run of SAMO-COBRA with the PHV infill criteria. See here the convergence plots on 7 test problems:
+
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20BNH%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20SRN%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20TNK%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
