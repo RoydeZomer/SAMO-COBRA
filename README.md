@@ -53,7 +53,6 @@ ref = np.array([1,9])
 feval = 40*d
 nConstraints = 2
 cobra = SAMO_COBRA_Init(xStart, fn, fName, lower, upper, nConstraints, ref=ref, feval=feval, initDesPoints=d+1, cobraSeed=0, iterPlot=True)
-cobra['plot'] = True
 cobra = SAMO_COBRA_PhaseII(cobra)
 
 ```
