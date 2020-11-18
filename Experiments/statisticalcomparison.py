@@ -9,6 +9,7 @@ from scipy.stats import ranksums
 from scipy.stats import kruskal
 from hypervolume import hypervolume
 import numpy as np
+import json 
 
 from NSGAIIexperimentshv import NSGAII_Experiment
 from NSGAIIIexperimentshv import NSGAIII_Experiment
@@ -26,7 +27,7 @@ with open("/results/nsgaii.json") as f:
 #     json_dumps_str = json.dumps(NSGAIII_results, indent=4)
 #     print(json_dumps_str, file=fout)
 with open("/results/nsgaiii.json") as f:
-    NSGAII_results = json.load(f)
+    NSGAIII_results = json.load(f)
     
 CEGO_results = {}
 PHV_results = {}
