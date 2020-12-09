@@ -27,198 +27,13 @@ import warnings
 import copy
 import os
 
-# from functools import partial
-
-
-# def getConstraintPredictionP(x, surrogateModels, bestPredictor, gresPlogDivider, gresRescaleDivider, EPS=None):                    
-#     constraintPredictions = np.zeros(cobra['nConstraints'])
-#     for coni in range(cobra['nConstraints']):
-#         conKernel = bestPredictor['conKernel'][coni]
-#         conLogStr = bestPredictor['conLogStr'][coni]
-#         surrogate = surrogateModels[conKernel]['Constraints'][conLogStr][coni]
-        
-#         if conLogStr=='PLOGrescaled':
-#             constraintPrediction = interpRBF(np.array(x), surrogate)
-#             constraintPrediction = gresPlogDivider[coni] * constraintPrediction
-#             constraintPrediction = plogReverse(constraintPrediction)
-#         else:
-#             constraintPrediction = interpRBF(np.array(x), surrogate)
-#             constraintPrediction = gresRescaleDivider[coni] * constraintPrediction                
-        
-#         if EPS is None:
-#             constraintPredictions[coni] = constraintPrediction
-#         else:
-#             constraintPredictions[coni] = constraintPrediction+EPS[coni]**2
-
-#     return constraintPredictions
-
-# def gCOBRAP(x, A, lower, upper, EPS, surrogateModels, bestPredictor, gresPlogDivider, gresRescaleDivider):
-
-#     boundaryConstraintsLower = lower - x
-#     boundaryConstraintsUpper = x - upper
-    
-#     h = 0
-#     distance = distLine(x, A)
-#     if any(distance<=cobra['seqTol']) or not all(np.isfinite(distance)):
-#         h = np.finfo(np.float64).max
-        
-#     constraintPrediction = getConstraintPredictionP(x, surrogateModels, bestPredictor, gresPlogDivider, gresRescaleDivider, EPS=None)
-    
-#     if np.any(np.isnan(x)):
-#         warnings.warn('gCOBRA: x value is NaN, returning Inf',DeprecationWarning)
-#         return([np.finfo(np.float64).min]*(len(constraintPrediction)+len(lower)+len(upper)+1))
-    
-#     h = np.append(np.array([-1*h]), -1*constraintPrediction) #cobyla treats positive values as feasible
-#     h = np.append(h, boundaryConstraintsLower)
-#     h = np.append(h, boundaryConstraintsUpper)
-#     return(h)
-
-# def subSMSProbP(x, ref, currentHV, paretoFront, surrogateModels, bestPredictor, fresPlogStandardizedStd, fresPlogStandardizedMean, fresStandardizedStd, fresStandardizedMean):    
-#     if np.any(np.isnan(x)):
-#         return np.finfo(np.float64).max
-#     if not all(np.isfinite(x)):
-#         return np.finfo(np.float64).max
-
-#     nObj = len(ref)
-#     potentialSolution = np.zeros(nObj)
-#     for obji in range(nObj):
-#         objKernel = bestPredictor['objKernel'][obji]
-#         objLogStr = bestPredictor['objLogStr'][obji]
-#         surrogate = surrogateModels[objKernel]['Objectives'][objLogStr][obji]
-        
-#         potsol = 0
-#         uncertainty = 0
-#         if objLogStr=='PLOGStandardized':
-#             # potsol, uncertainty = interpRBF(x, surrogate, uncertainty=True)
-#             # uncertainty = uncertainty * cobra['FresStandardizedStd'][obji]
-            
-#             potsol = interpRBF(x, surrogate, uncertainty=False)                
-#             potsol = potsol*fresPlogStandardizedStd[obji] + fresPlogStandardizedMean[obji]
-#             potsol = plogReverse(potsol)
-            
-            
-#         else:
-#             # potsol, uncertainty = interpRBF(x, surrogate, uncertainty=True)
-#             # uncertainty = uncertainty * cobra['FresStandardizedStd'][obji]
-#             potsol = interpRBF(x, surrogate, uncertainty=False)
-#             potsol = potsol*fresStandardizedStd[obji] + fresStandardizedMean[obji]
-                            
-#         if not np.isfinite(potsol):
-#             return np.finfo(np.float64).max
-#         if not np.isfinite(uncertainty):
-#             return np.finfo(np.float64).max
-        
-#         # potentialSolution[obji] = potsol - np.abs(uncertainty)
-#         potentialSolution[obji] = potsol
-            
-    
-#     penalty = 0
-#     ##### add epsilon?
-#     if not all(np.isfinite(potentialSolution)):
-#         return np.finfo(np.float64).max
-    
-#     logicBool = np.all(paretoFront<= potentialSolution, axis=1)
-#     for j in range(paretoFront.shape[0]):
-#         if logicBool[j]:
-#             p = - 1 + np.prod(1 + (potentialSolution-paretoFront[j,:]))
-#             penalty = max(penalty, p)
-#     if penalty == 0: #non-dominated solutions
-#         potentialFront = np.append(paretoFront, [potentialSolution], axis=0)
-#         myhv = hypervolume(potentialFront, ref)
-#         f = currentHV - myhv
-#     else:
-#         f = penalty
-#     return f
-
-# def findLocalOptimaP(args):
-#     subSMSProbP, xStart, cons, opts, method = args
-#     # print("start")
-#     subMin = optimize.minimize(subSMSProbP, xStart, constraints=cons, options=opts, method=method)
-#     return subMin
-
-
-##########################################################################################################
-# Some rules about the COBRA-II-code:
-#
-# - cobra$df contains one row for each iteration, including initial points
-#   cobra$df2 contains one row for each phase-II iteration only
-# - cobra$PLOG is set by adFit (SACOBRA.R) and adFit is called at the start of each iteration
-#   (see trainSurrogates here in phase II)
-# - cobra$solu is always in original input space. But when it is used (for diagnostics) in 
-#   updateSaveCobra, then a local copy \code{solu} is made, and - if cobra$rescale==TRUE - 
-#   \code{solu} is transformed to the rescaled space.
-#   If the new infill point is feasible, take its fn[1]-value (of course!). If it is not feasible,
-#   leave it at the setting from cobraInitial.R#400: from all points of the initial design
-#   with minimum number of violated constraints, take the one with smallest Fres.
-# 
-##########################################################################################################
 def SAMO_COBRA_PhaseII(cobra):
-    '''
-    Improve the feasible solution by searching new infill points
-    Improve the feasible solution using the COBRA optimizer phase II
-    by searching new infill points with the help of RBF surrogate models. 
-    May be even called if no feasible solution is found yet, then phase II will try to find
-    feasible solutions.
-    @param cobra an object of class COBRA, this is a (long) list containing all settings
-        from cobraInit
-    @return cobra, an object of class COBRA from cobraInit, 
-      enhanced here by the following elements (among others):
-        fn function returning an (m+1)-vector c(objective,g1,...,gm). This
-              function may be a rescaled and plog-transformed version of the original fn 
-              passed into cobraInit. The original fn is in 
-              cobra$originalFn. 
-        df  data frame with summary of the optimization run (see below)
-        df2  data frame with additional summary information (see below)
-        A (feval x dim)-matrix containing all evaluated points 
-              in input space. If rescale==TRUE, all points are in rescaled input space. 
-        Fres a vector of the objective values of all evaluated points 
-        Gres a matrix of the constraint values of all evaluated points 
-        ibest the corresponding iteration number (row of cobra$df, of cobra$A)
-        PLOG If TRUE, then the objective surrogate model is trained on the 
-              plog-transformed objective function. 
-        
-     Note that cobra$Fres,
-     always the objective values of the orignial function cobra$fn[1]. (The surrogate models 
-     may be trained on a plog-transformed version of this function.)
-     
-     The data frame cobra$df contains one row per iteration with columns 
-        iter  
-        y   true objective value Fres 
-        predY  surrogate objective value. Note: The surrogate may be trained on  
-              plog-transformed training data, but predY is transformed back to the original 
-              objective range. NA for the initial design points.
-        predSolu  surrogate objective value at best-known solution cobra$solu, if given. 
-              If cobra$solu is NULL, take the current point instead. Note: The surrogate may be trained on  
-              plog-transformed training data, but predSolu is transformed back to the original 
-              objective range. NA for the initial design points.
-        nViolations  
-        maxViolation  
-        FEval  number of function evaluations in sequential optimizer. NA if it was a repair step 
-        optimizer e.g. "COBYLA"  
-        optimizationTime  in sec
-        conv  
-        seed  
-     
-     The data frame cobra$df2 contains one row per phase-II-iteration with columns 
-        iter  
-        predY  surrogate objective value. Note: The surrogate may be trained on  
-              plog-transformed training data, but predY is transformed back to the original 
-              objective range. NA for the initial design points.
-        predVal   surrogate objective value + penalty 
-        predSolu   surrogate objective value at true solution (see cobra$df$predSolu) 
-        predSoluPenal   surrogate objective value + penalty at true solution (only diagnostics)
-        EPS  
-     
-    seealso   cobraPhaseI, cobraInit
-    '''
+
     # print("PHASE II started")
     phase = 'PHASE II'
     if cobra['hypervolumeProgress'] is None:
         raise ValueError("cobraPhaseII: cobra['hypervolumeProgress'] is None! First run smscobraInit")
-    ###########################################################################
-    # STEP5:                                                                  #
-    # Initializing the parameters and Initialize the margin  and counters     #
-    ###########################################################################
+        
     fn = cobra['fn']
     cobra['EPS'] = np.array(cobra['epsilonInit']) # Initializing margin for all constraints
     n = len(cobra['A'])
@@ -460,8 +275,8 @@ def SAMO_COBRA_PhaseII(cobra):
             
         constraintPrediction = getConstraintPrediction(x, cobra['EPS'])
         
-        if np.any(np.isnan(x)):
-            warnings.warn('gCOBRA: x value is NaN, returning Inf',DeprecationWarning)
+        if np.any(np.isnan(constraintPrediction)):
+            warnings.warn('gCOBRA: constraintPrediction value is NaN, returning Inf',DeprecationWarning)
             return([np.finfo(np.float64).min]*(len(constraintPrediction)+1))
         
         h = np.append(np.array([-1*h]), -1*constraintPrediction) #cobyla treats positive values as feasible
@@ -591,17 +406,7 @@ def SAMO_COBRA_PhaseII(cobra):
                     sol = cobra['GresRescaledDivider'][coni] * sol
                     cobra['SurrogateErrors']['CON'+str(coni)+kernel].append((sol - conTrue[coni])**2)
         
-        # print(find_surrogate_steepness(cobra))
         tempErrors = copy.deepcopy(cobra['SurrogateErrors'])
-        # for obji in range(cobra['nObj']):
-        #     if max(cobra['Fres'][:,obji]) - min(cobra['Fres'][:,obji]) < 2:
-        #         for kernel in cobra['RBFmodel']:
-        #             tempErrors['OBJ'+str(obji)+'PLOG'+kernel][-1] = np.inf
-        
-        # for coni in range(cobra['nConstraints']):
-        #     if max(cobra['Gres'][:,coni]) - min(cobra['Gres'][:,coni]) < 2:
-        #         for kernel in cobra['RBFmodel']:
-        #             tempErrors['CON'+str(coni)+'PLOG'+kernel][-1] = np.inf
                 
         hvgrowing = np.zeros(len(cobra['hypervolumeProgress']))==1
         for i in range(1,len(cobra['hypervolumeProgress'])):    
