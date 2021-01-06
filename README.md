@@ -18,7 +18,8 @@ To use the optimization algorithm you need to define an objective function, the 
 import numpy as np
 
 #imports from our package
-from CONSTRAINED_SMSEGO import CONSTRAINED_SMSEGO
+from SAMO_COBRA_Init import SAMO_COBRA_Init
+from SAMO_COBRA_PhaseII import SAMO_COBRA_PhaseII
 
 
 # The "black-box" function
