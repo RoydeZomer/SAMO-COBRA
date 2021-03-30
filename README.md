@@ -9,6 +9,8 @@ In every iteration one solution is added and evaluated, resulting in a strategy 
 The proposed algorithm is compared to several other algorithms (NSGA-II, NSGA-III, CEGO, SMES-RBF) on 18 constrained multi-objective problems. 
 In the experiments we show that our algorithm outperforms the other algorithms in terms of achieved HyperVolume (HV) after a fixed number of function evaluations.
 
+More information about this algorithm can be found in the original paper here: https://link.springer.com/chapter/10.1007%2F978-3-030-72062-9_22
+
 ## Usage
 
 To use the optimization algorithm you need to define an objective function, the constraint function, and the search space before you can start the optimizer. Below is an examples that describe most of the functionality.
