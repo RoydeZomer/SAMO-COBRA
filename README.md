@@ -76,4 +76,4 @@ Also a comparison is made with SMES-RBF. Because the authors of SMES-RBF didn't 
 
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/samo-cobra-vs-smes-rbf.PNG?raw=true))
 ![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/tricop-convergence.PNG?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/BNH20%convergence.PNG?raw=true)
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/BNH-convergence.PNG?raw=true)
