@@ -260,7 +260,7 @@ def NSGAIII_Experiment():
     for d in range(1,20):
         hyp = []
         nfes = []
-        for i in range(100):
+        for i in range(1):
             problem = Problem(2,2,2)
             problem.types[:] = [Real(0,5),Real(0,3)]
             problem.constraints[:] = "<=0"
@@ -280,6 +280,7 @@ def NSGAIII_Experiment():
         if np.mean(nfes)<(40*problem.nvars*1.1):
             if np.mean(hypNS3) < np.mean(hyp):
                 hypNS3 = hyp
+                print(d)
     print(funcname, np.mean(hypNS3), '(', np.std(hypNS3), ')')
     NSGAIII_results[funcname] = hypNS3
 
