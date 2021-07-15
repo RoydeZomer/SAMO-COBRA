@@ -63,18 +63,17 @@ cobra = SAMO_COBRA_PhaseII(cobra)
 ```
 
 
-## Comparison with CEGO, NSGA-II, NSGA-III
-Two Different infill criteria are used for SAMO-COBRA. The Predicted HyperVolume (PHV) infill criteria, and the S-Metric Selection infill criteria (SMS). The variants are compared to CEGO, NSGAII, NSGAIII on 18 test problems. The experiments can be found in the Experiments folder. See the results here:
+## Comparison with CEGO, NSGA-II, NSGA-III, SA-NSGA-II, IC-SA-NSGA-II
+Mean HV after 40·d function evaluations for each algorithm on each test function. Note that for IC-SA-NSGA-II onlythe objective function evaluations are counted. PHV and SMS represents the SAMO-COBRA variants. The highest mean HV per test function are presented in bold. The Wilcoxon rank-sum test (with Bonferroni correction) significance is represented with a grayscale. Background colors represent:p≤0.001, p≤0.01, p≤0.05. Red shows that the algorithm took more than 24 hours. The experiments can be found in the Experiments folder. See the results here:
 
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/SAMO_COBRA_RESULTS.PNG?raw=true)
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/samo-cobra-results-hv.PNG?raw=true)
+
+Test Function, Threshold Hypervolume, and number of function evaluations required to achieve this threshold peroptimization algorithm. The results of the algorithm with the smallest number of function evaluations is reported in bold andaccompanied with a ↑. PHV and SMS represents the SAMO-COBRA variants. Experiments that required more then 5000 function evaluations or more then 24 hours are terminated.
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/samo-cobra-results-fe.PNG?raw=true)
 
 ## Comparison with SMES-RBF
-Also a comparison is made with SMES-RBF. Because the authors of SMES-RBF didn't provide an implementation, the results form their paper are compared to one run of SAMO-COBRA with the PHV infill criteria. See here the convergence plots on 7 test problems:
+Also a comparison is made with SMES-RBF. Because the authors of SMES-RBF didn't provide an implementation, the results form their paper are compared to one run of SAMO-COBRA with the PHV infill criteria. See here two convergence and number of function evaluations to achieve the same results on the other problems:
 
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20BNH%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20SRN%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20TNK%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20OSY%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20TRICOP%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20BICOP1%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
-![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/SMES_ReferencePoints_rregis/Convergenceplot%20BICOP2%20SAMO-COBRA%20vs%20SAMO-COBRA.png?raw=true)
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/samo-cobra-vs-smes-rbf.PNG?raw=true))
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/tricop-convergence.PNG?raw=true)
+![alt text](https://github.com/RoydeZomer/SAMO-COBRA/blob/main/Experiments/BNH-convergence.PNG?raw=true)
